@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 set -e
 
@@ -29,7 +29,16 @@ wg-quick up $interface
 # IPv4 kill switch: traffic must be either (1) to the WireGuard interface, (2) marked as a WireGuard packet, (3) to a local address, or (4) to the Docker network
 docker_network="$(ip -o addr show dev eth0 | awk '$3 == "inet" {print $4}')"
 docker_network_rule=$([ ! -z "$docker_network" ] && echo "! -d $docker_network" || echo "")
-iptables -I OUTPUT ! -o $interface -m mark ! --mark $(wg show $interface fwmark) -m addrtype ! --dst-type LOCAL $docker_network_rule -j REJECT
+#iptables -I OUTPUT ! -o $interface -m mark ! --mark $(wg show $interface fwmark) -m addrtype ! --dst-type LOCAL $docker_network_rule -j REJECT
+iptables -t nat -A POSTROUTING -o $interface -j MASQUERADE # Enable NAT
+iptables -A FORWARD -i eth0 -o $interface -j ACCEPT    # Allow traffic from eth0 to wg iface
+iptables -A FORWARD -i $interface -o eth0 -m state --state RELATED,ESTABLISHED -j ACCEPT # Allow returning traffic
+iptables -A INPUT -i lo -j ACCEPT  # Allow loopback
+iptables -A INPUT -i eth0 -p icmp -j ACCEPT # Allow pinging the container
+# iptables -P FORWARD DROP    # Disable
+# iptables -P INPUT DROP      # all other
+# iptables -L                 # traffic
+
 
 # IPv6 kill switch: traffic must be either (1) to the WireGuard interface, (2) marked as a WireGuard packet, (3) to a local address, or (4) to the Docker network
 docker6_network="$(ip -o addr show dev eth0 | awk '$3 == "inet6" {print $4}')"
