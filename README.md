@@ -4,7 +4,7 @@ https://hub.docker.com/r/iabadia/wireguard-gateway-arm64
 
 Dockerhub automated builds are disabled as it doesn't support arm based images.
 
-Based on [https://github.com/jordanpotter/docker-wireguard](jordanpotter/docker-wireguard)
+Based on [jordanpotter/docker-wireguard](https://github.com/jordanpotter/docker-wireguard)
 
 ## Prerequisites
 
