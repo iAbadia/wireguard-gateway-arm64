@@ -1,5 +1,8 @@
 # wireguard-gateway-arm64
+Aarch64 based wireguard gateway. Tested on Raspberry Pi. Have an always on Wireguard gateway on your local network!
 https://hub.docker.com/r/iabadia/wireguard-gateway-arm64
+
+Dockerhub automated builds are disabled as it doesn't support arm based images.
 
 ## Prerequisites
 
