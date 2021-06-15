@@ -4,6 +4,8 @@ https://hub.docker.com/r/iabadia/wireguard-gateway-arm64
 
 Dockerhub automated builds are disabled as it doesn't support arm based images.
 
+Based on [https://github.com/jordanpotter/docker-wireguard](jordanpotter/docker-wireguard)
+
 ## Prerequisites
 
 - linux-headers installed on the host (apt install linux-headers-$(uname -r))
